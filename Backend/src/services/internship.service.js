@@ -86,10 +86,20 @@ async function searchInternships(keyword) {
         [`%${keyword}%`, `%${keyword}%`]);
 }
 
+async function getInternshipOwner(internshipId){
+
+    const sql = ` SELECT company_id FROM internships WHERE internship_id = ?`;
+    const rows = await query (sql, [internshipId]);
+    
+
+    return rows[0];
+}
+
 module.exports = {
     createInternship,
     getInternships,
     getInternshipById,
     getAllInternships,
     searchInternships,
+    getInternshipOwner,
 };
