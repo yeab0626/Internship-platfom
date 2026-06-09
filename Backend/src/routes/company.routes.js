@@ -6,9 +6,9 @@ const { verifyToken } = require("../middleware/auth.middleware");
 const { requireRole } = require("../middleware/role.middleware");
 
 
-router.post("/profile", verifyToken, requireRole("company"), companyController.createCompanyProfile);
+router.post("/profile",verifyToken,requireRole("company"),companyController.createCompanyProfile);
 
-router.get("/:companyId", companyController.getCompanyProfile);
+router.get("/dashboard",verifyToken,requireRole("company"),companyController.getDashboardStatus);
 
-
+router.get("/:companyId",companyController.getCompanyProfile);
 module.exports = router;

@@ -36,12 +36,15 @@ async function createCompanyProfile(req, res) {
 async function getCompanyProfile(req, res) {
 
     try {
-        const company = await companyService.getCompanyProfile(
-            req.params.companyId
+       const company = await companyService.getCompanyByUserId(
+               req.user.user_id
         );
 
+        console.log("Logged in User:", req.user);
+        console.log("Company Found:", company);
+
         if(!company) {
-            return res.status(404),json({
+            return res.status(404).json({
                 success: false,
                 message: "company not found"
             });
@@ -61,8 +64,41 @@ async function getCompanyProfile(req, res) {
     }
 }
 
+async function getDashboardStatus(req, res){
+
+    try {
+        const company = await companyService.getCompanyByUserId(req.user.user_id);
+
+        if(!company) {
+            return res.status(404).json({
+                success: false,
+                message: "company profile not found",
+            });
+        }
+        
+        const status = await companyService.getDashboardStatus(company.company_id);
+
+        return res.status(200).json({
+            success: true,
+            status,
+        });
+
+    } catch (error) {
+         
+           console.error(error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to retrieve dashboard statistics",
+        });
+    }
+ }
+
+
+
 
 module.exports = {
     createCompanyProfile,
     getCompanyProfile,
+    getDashboardStatus,
 }
